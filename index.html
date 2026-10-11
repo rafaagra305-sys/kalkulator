@@ -1,0 +1,153 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>kalkulator</title>
+
+        <style>
+            body{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 0;
+            }
+
+            .kalkulator{
+                padding: 20px;
+                border-radius: 16px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                width: 280px;
+            }
+
+            .display{
+                text-align: right;
+                font-size: 32px;
+                padding: 15px;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                min-height: 40px;
+                word-wrap: break-word;
+            }
+
+            .button{
+                display: grid;
+                grid-template-columns: repeat(4,1fr);
+                gap: 10px;
+            }
+
+            button{
+                padding: 15px;
+                font-size: 18px;
+                font-weight: bold;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+
+            button:hover{
+                background-color: antiquewhite;
+            }   
+
+            button.equal {
+                grid-column: span 2;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="kalkulator">
+
+            <div class="display">
+                <div id="screen">0</div>
+            </div>
+
+            <div class="button">
+                <button onclick="clearscreen()">C</button>
+                <button onclick="appendoperator('%')">%</button>
+                <button onclick="deletelast()">DEL</button>
+                <button onclick="appendoperator('÷')">÷</button>
+
+                <button onclick="appendnumber('7')">7</button>
+                <button onclick="appendnumber('8')">8</button>
+                <button onclick="appendnumber('9')">9</button>
+                <button onclick="appendoperator('X')">X</button>
+
+                <button onclick="appendnumber('4')">4</button>
+                <button onclick="appendnumber('5')">5</button>
+                <button onclick="appendnumber('6')">6</button>
+                <button onclick="appendoperator('-')">-</button>
+
+                <button onclick="appendnumber('1')">1</button>
+                <button onclick="appendnumber('2')">2</button>
+                <button onclick="appendnumber('3')">3</button>
+                <button onclick="appendoperator('+')">+</button>
+
+                <button onclick="appendnumber('0')">0</button>
+                <button onclick="appendnumber('.')">.</button>
+                <button onclick="calculate()" class="equal">=</button>
+            </div>
+        </div>
+
+        <script>
+            let currentinput='0'
+
+            const screen= document.getElementById("screen");
+
+            function UpdateScreen(){
+                screen.innerText = currentinput;
+            }
+            
+            function appendnumber(num){
+                if (currentinput == '0'){
+                    currentinput=num;
+                }
+                else{
+                    currentinput += num;
+                }
+                UpdateScreen();
+            }
+
+            function appendoperator(op){
+                const lastchar = currentinput.slice(-1);
+
+                if(["+","-","X","÷","%"].includes(lastchar)){
+                    currentinput=currentinput.slice(0,-1) + op;
+                }
+                else{
+                    currentinput += op;
+                }
+                UpdateScreen();
+            }
+
+            function clearscreen(){
+                currentinput="0";
+                UpdateScreen();
+            }
+
+            function deletelast(){
+                if (currentinput.length === 1){
+                    currentinput = "0";
+                }
+                else{
+                    currentinput = currentinput.slice(0,-1);
+                }
+                UpdateScreen();
+            }
+
+            function calculate(){
+                try{
+                    let bener = currentinput
+                    .replaceAll('X','*')
+                    .replaceAll('÷','/');
+                    currentinput = eval(bener).toString();
+                }
+                catch (eror){
+                    currentinput = "eror";
+                }
+                UpdateScreen();
+            }
+        </script>
+    </body>
+    </html>
